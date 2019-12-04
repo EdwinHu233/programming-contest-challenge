@@ -1,64 +1,58 @@
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
-#include <algorithm>
+
 using namespace std;
 
-#define Interval pair<double, double>
 const int MAX = 1024;
 
-Interval is[MAX];
+pair<float, float> xs[MAX];
+
 int n, d;
+bool impossible;
 
-bool init()
-{
-    bool flag = true;
-    for (int i = 0; i < n; ++i)
-    {
-        int x, y;
-        scanf("%d%d", &x, &y);
-        if (d >= y)
-        {
-            double r = sqrt(d * d - y * y);
-            is[i] = make_pair(x - r, x + r);
-        }
-        else
-        {
-            flag = false;
-        }
+bool init() {
+  scanf("%d %d", &n, &d);
+  if (n == 0) {
+    return false;
+  }
+  impossible = false;
+  for (int i = 0; i < n; ++i) {
+    int x, y;
+    scanf("%d %d", &x, &y);
+    if (d >= y) {
+      float half = sqrt(d * d - y * y);
+      xs[i].first = x - half;
+      xs[i].second = x + half;
+    } else {
+      impossible = true;
     }
-    return flag;
+  }
+  return true;
 }
 
-int solve()
-{
-    double rightmost = -1e10;
-    int ans = 0;
-    sort(is, is + n);
-    for (int i = 0; i < n; ++i)
-    {
-        if (rightmost < is[i].first)
-        {
-            ++ans;
-            rightmost = is[i].second;
-        }
-        else
-        {
-            rightmost = min(rightmost, is[i].second);
-        }
+int solve() {
+  if (impossible) {
+    return -1;
+  }
+  sort(xs, xs + n);
+  int cnt = 1;
+  float radar = xs[0].second;
+  for (int i = 1; i < n; ++i) {
+    if (radar < xs[i].first) {
+      radar = xs[i].second;
+      cnt += 1;
+    } else {
+      radar = min(radar, xs[i].second);
     }
-    return ans;
+  }
+  return cnt;
 }
 
-int main()
-{
-#ifndef ONLINE_JUDGE
-    freopen("in", "r", stdin);
-    freopen("out", "w", stdout);
-#endif
-    int case_id = 0;
-    while (scanf("%d%d", &n, &d) && n > 0)
-    {
-        int ans = init() ? solve() : -1;
-        printf("Case %d: %d\n", ++case_id, ans);
-    }
+int main() {
+  int i = 0;
+  while (init()) {
+    printf("Case %d: %d\n", ++i, solve());
+  }
+  return 0;
 }

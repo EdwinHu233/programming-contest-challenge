@@ -1,45 +1,27 @@
+#include <algorithm>
 #include <cstdio>
 #include <queue>
 using namespace std;
 
-#define ULL unsigned long long
+const int MAX = 20010;
+int n;
+priority_queue<long long, vector<long long>, greater<long long> /**/> pq;
 
-priority_queue<ULL, vector<ULL>, greater<ULL> > pq;
-int N;
-
-void init()
-{
-    scanf("%d", &N);
+int main() {
+  scanf("%d", &n);
+  for (int i = 0; i < n; ++i) {
     int x;
-    for (int i = 0; i < N; ++i)
-    {
-        scanf("%d", &x);
-        pq.push(x);
-    }
-}
-
-ULL solve()
-{
-    ULL ans = 0;
-    for (int i = 0; i < N - 1; ++i)
-    {
-        int a = pq.top();
-        pq.pop();
-        int b = pq.top();
-        pq.pop();
-        ans += a + b;
-        pq.push(a + b);
-    }
-    return ans;
-}
-
-int main()
-{
-// #define LOCAL
-#ifdef LOCAL
-    freopen("in", "r", stdin);
-    freopen("out", "w", stdout);
-#endif
-    init();
-    printf("%llu", solve());
+    scanf("%d", &x);
+    pq.push(x);
+  }
+  long long ans = 0;
+  for (int i = 0; i < n - 1; ++i) {
+    int x = pq.top();
+    pq.pop();
+    int y = pq.top();
+    pq.pop();
+    ans += x + y;
+    pq.push(x + y);
+  }
+  printf("%lld\n", ans);
 }

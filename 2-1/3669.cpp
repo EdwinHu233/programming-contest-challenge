@@ -28,7 +28,7 @@ void init() {
 }
 
 int solve() {
-  queue<pair<int, int> > q;
+  queue<pair<int, int>> q;
   q.push(make_pair(0, 0));
   visit[0][0] = true;
   int t = 0;

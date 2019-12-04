@@ -1,59 +1,43 @@
-#include <cstdio>
 #include <algorithm>
-
+#include <cstdio>
 using namespace std;
 
 const int MAX = 1024;
-int pos[MAX];
-int R, N;
+int xs[MAX];
+int R, n;
 
-bool init()
-{
-    scanf("%d%d", &R, &N);
-    if (R < 0)
-    {
-        return false;
-    }
-    for (int i = 0; i < N; ++i)
-    {
-        scanf("%d", pos + i);
-    }
-    sort(pos, pos + N);
-    return true;
+bool init() {
+  scanf("%d%d", &R, &n);
+  if (R < 0) {
+    return false;
+  }
+  for (int i = 0; i < n; ++i) {
+    scanf("%d", xs + i);
+  }
+  return true;
 }
 
-int solve()
-{
-    int ans = 0;
-    int start = 0;
-    while (start < N)
-    {
-        int mid = start;
-        while (mid < N && pos[mid] - pos[start] <= R)
-        {
-            ++mid;
-        }
-        --mid;
-        int end = mid;
-        while (end < N && pos[end] - pos[mid] <= R)
-        {
-            ++end;
-        }
-        start = end;
-        ++ans;
-    }
-    return ans;
+int find_rightmost(int i) {
+  int j = i;
+  while (j < n && xs[i] + R >= xs[j]) {
+    ++j;
+  }
+  return j - 1;
 }
 
-int main()
-{
-#define LOCAL
-#ifdef LOCAL
-    freopen("in", "r", stdin);
-    freopen("out", "w", stdout);
-#endif
-    while (init())
-    {
-        printf("%d\n", solve());
-    }
+int solve() {
+  sort(xs, xs + n);
+  int ans = 0;
+  int i = 0;
+  while (i < n) {
+    i = find_rightmost(find_rightmost(i)) + 1;
+    ++ans;
+  }
+  return ans;
+}
+
+int main() {
+  while (init()) {
+    printf("%d\n", solve());
+  }
 }
